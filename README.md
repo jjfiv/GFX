@@ -41,7 +41,7 @@ This repository can be used via [jitpack.io](https://jitpack.io). First, add the
   ```
   
  Next, add this repo:
- ```
+ ```xml
      <dependency>
       <groupId>com.github.jjfiv</groupId>
       <artifactId>GFX</artifactId>
