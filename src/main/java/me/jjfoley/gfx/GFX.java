@@ -1,11 +1,19 @@
 package me.jjfoley.gfx;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageOutputStream;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
@@ -13,7 +21,8 @@ import javax.swing.WindowConstants;
 /**
  * Extend this class to have a graphical application with Java.
  * 
- * <pre>{@code
+ * <pre>
+ * {@code
 import java.awt.Color;
 import java.awt.Graphics2D;
 
@@ -30,7 +39,8 @@ public class MyDrawing extends GFX {
 		app.start();
 	}
 }
-}</pre>
+}
+ * </pre>
  * 
  * @author jfoley
  *
@@ -52,7 +62,7 @@ public abstract class GFX {
 	/**
 	 * This variable controls how fast we draw the screen.
 	 */
-	private static final int delay_ms = 1000 / 50;
+	public static final int delay_ms = 1000 / 50;
 
 	/**
 	 * This variable tells us whether we are running our application or not. When
@@ -143,7 +153,8 @@ public abstract class GFX {
 	/**
 	 * Gets the state of a key without modifying that state.
 	 * 
-	 * @param code the keycode, see {@link KeyEvent}, e.g., {@link KeyEvent#VK_SPACE}
+	 * @param code the keycode, see {@link KeyEvent}, e.g.,
+	 *             {@link KeyEvent#VK_SPACE}
 	 * @return true if the key is pressed.
 	 */
 	public final boolean isKeyDown(int code) {
@@ -153,11 +164,49 @@ public abstract class GFX {
 	/**
 	 * Gets the state of a key and "unpresses" it.
 	 * 
-	 * @param code the keycode, see {@link KeyEvent}, e.g., {@link KeyEvent#VK_SPACE}
+	 * @param code the keycode, see {@link KeyEvent}, e.g.,
+	 *             {@link KeyEvent#VK_SPACE}
 	 * @return true if the key is down, false if it was not down.
 	 */
 	public final boolean processKey(int code) {
 		return events.keyState.remove(code) != null;
+	}
+
+	/**
+	 * Save your graphics app to a GIF file (make a new one for this so it plays to a file from the start!).
+	 * @param destination Try {@code new File("animation.gif")}.
+	 * @param numSteps How many steps do you want to save? A very large number here will make a big file and take a long time to write.
+	 */
+	public final void playToGIF(File destination, int numSteps) {
+		try (ImageOutputStream out = ImageIO.createImageOutputStream(destination)) {
+			final BufferedImage frame = new BufferedImage(this.getWidth(), this.getHeight(),
+					BufferedImage.TYPE_INT_RGB);
+			GifSequenceWriter writer = new GifSequenceWriter(out, frame.getType(), delay_ms, false);
+
+			for (int i = 0; i < numSteps; i++) {
+				if (i % 20 == 0) {
+					System.out.printf("Writing gif: %d/%d\n", i, numSteps);
+				}
+				Graphics2D g = frame.createGraphics();
+				g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+				this.update((delay_ms) / 1e3);
+				g.setColor(Color.black);
+				g.fillRect(0, 0, this.getWidth(), this.getHeight());
+				this.draw(g);
+				g.dispose();
+
+				writer.writeToSequence(frame);
+			}
+
+			System.out.printf("Writing gif: %d/%d\n", numSteps, numSteps);
+		} catch (FileNotFoundException e) {
+			throw new AssertionError("Couldn't save the file you asked for: " + destination, e);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		System.out.println("Saved " + numSteps + " to " + destination + " successfully!");
 	}
 
 	/**

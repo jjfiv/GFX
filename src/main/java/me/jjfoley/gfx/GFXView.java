@@ -42,7 +42,7 @@ class GFXView extends Canvas {
 		app.draw(g);
 
 		g.dispose();
-		bs.show();
+		bs.show();		
 	}
 
 }
