@@ -1,4 +1,4 @@
-# GFX
+# GFX [![Build Status](https://travis-ci.org/jjfiv/GFX.svg?branch=master)](https://travis-ci.org/jjfiv/GFX)
 Smith College / CSC212 / GFX library to simplify Graphics2D access.
 
 [JavaDoc](https://jitpack.io/com/github/jjfiv/GFX/1.1/javadoc/)
