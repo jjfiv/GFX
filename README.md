@@ -1,7 +1,7 @@
 # GFX [![Build Status](https://travis-ci.org/jjfiv/GFX.svg?branch=master)](https://travis-ci.org/jjfiv/GFX)
 Smith College / CSC212 / GFX library to simplify Graphics2D access.
 
-[JavaDoc](https://jitpack.io/com/github/jjfiv/GFX/1.1/javadoc/)
+[JavaDoc](https://jitpack.io/com/github/jjfiv/GFX/1.2/javadoc/)
 
 
 ## Motivation
@@ -45,6 +45,6 @@ This repository can be used via [jitpack.io](https://jitpack.io). First, add the
      <dependency>
       <groupId>com.github.jjfiv</groupId>
       <artifactId>GFX</artifactId>
-      <version>1.1</version>
+      <version>1.2</version>
     </dependency>
  ```
