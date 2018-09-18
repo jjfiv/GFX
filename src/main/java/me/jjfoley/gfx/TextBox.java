@@ -3,24 +3,26 @@ package me.jjfoley.gfx;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.Objects;
 
 /**
  * A class that simplifies drawing of text in Java.
+ * 
  * @author jfoley
  *
  */
 public class TextBox {
-	/**
-	 * A pre-cooked font that is plain, size 16.
-	 */
+    /**
+     * A pre-cooked font that is plain, size 16.
+     */
     public static Font PLAIN_FONT = new Font("Arial", Font.PLAIN, 16);
     /**
-	 * A pre-cooked font that is italics, size 16.
-	 */
+     * A pre-cooked font that is italics, size 16.
+     */
     public static Font ITALICS_FONT = new Font("Arial", Font.ITALIC, 16);
     /**
-	 * A pre-cooked font that is bold, size 16.
-	 */
+     * A pre-cooked font that is bold, size 16.
+     */
     public static Font BOLD_FONT = new Font("Arial", Font.BOLD, 16);
 
     private Font font;
@@ -31,18 +33,20 @@ public class TextBox {
 
     /**
      * Create a new TextBox with the given text in "plain" RED at (0,0).
+     * 
      * @param text The message to display.
      */
     public TextBox(String text) {
-        this(0,0,text,PLAIN_FONT,Color.red);
+        this(0, 0, text, PLAIN_FONT, Color.red);
     }
-    
+
     /**
      * Create a new TextBox, filling out every parameter.
-     * @param x The x-coordinate of where to draw the text.
-     * @param y The y-coordinate of where to draw the text.
-     * @param text The message to draw.
-     * @param font The font to draw our text with.
+     * 
+     * @param x     The x-coordinate of where to draw the text.
+     * @param y     The y-coordinate of where to draw the text.
+     * @param text  The message to draw.
+     * @param font  The font to draw our text with.
      * @param color The color of our text.
      */
     public TextBox(double x, double y, String text, Font font, Color color) {
@@ -55,13 +59,15 @@ public class TextBox {
     }
 
     /**
-     *  This is updated only by the measure() method.
+     * This is updated only by the measure() method.
      */
     private Rectangle2D measured;
 
     /**
      * Change the font used for this TextBox.
-     * @param font The new font to use. Try {@link #BOLD_FONT}, {@link #ITALICS_FONT} for examples.
+     * 
+     * @param font The new font to use. Try {@link #BOLD_FONT},
+     *             {@link #ITALICS_FONT} for examples.
      */
     public void setFont(Font font) {
         this.font = font;
@@ -70,6 +76,7 @@ public class TextBox {
 
     /**
      * Make the font bigger or smaller, the default size is 16.
+     * 
      * @param size The new size to use!
      */
     public void setFontSize(double size) {
@@ -79,11 +86,17 @@ public class TextBox {
 
     /**
      * Change the message in this TextBox.
+     * 
      * @param text The new message.
      */
     public void setString(String text) {
+        String oldText = this.text;
+
         this.text = text;
-        measure();
+        // Only measure text if it's any different!
+        if (!Objects.equals(oldText, text)) {
+            measure();
+        }
     }
 
     /**
@@ -95,6 +108,7 @@ public class TextBox {
 
     /**
      * Change the color of the font in this TextBox.
+     * 
      * @param color The new Color.
      */
     public void setColor(Color color) {
@@ -103,6 +117,7 @@ public class TextBox {
 
     /**
      * Center this text (as best as possible) inside another Rectangle.
+     * 
      * @param outer The rectangle in which to center this text.
      */
     public void centerInside(Rectangle2D outer) {
@@ -113,28 +128,34 @@ public class TextBox {
 
     /**
      * Draw this TextBox to a Graphics2D object.
+     * 
      * @param g The graphics to draw to.
      */
     public void draw(Graphics2D g) {
-        // Measuring is important for font because it tells us how far down letters should be and how much to offset the start of the text.
+        // Measuring is important for font because it tells us how far down letters
+        // should be and how much to offset the start of the text.
         g.setColor(color);
-        g.drawString(text, (float) (x + measured.getX()), (float) (y -measured.getY()));
+        g.setFont(this.font);
+        g.drawString(text, (float) (x + measured.getX()), (float) (y - measured.getY()));
     }
 
     /**
      * Get the dimensions of this text (with this font and size) as a Rectangle.
+     * 
      * @return The width and height of this text.
      */
     public Rectangle2D getBoundingBox() {
-        return new Rectangle2D.Double(0,0, measured.getWidth(), measured.getHeight());
+        return new Rectangle2D.Double(0, 0, measured.getWidth(), measured.getHeight());
     }
 
     /**
-     * We trick Java into measuring text before we are draw it by creating a single pixel and "drawing" to that.
+     * We trick Java into measuring text before we are draw it by creating a single
+     * pixel and "drawing" to that.
      */
     private static class FontMeasuring {
         private static BufferedImage forGraphics = new BufferedImage(1, 1, BufferedImage.TYPE_4BYTE_ABGR);
         private static Graphics2D forMeasuring = forGraphics.createGraphics();
+
         private static Rectangle2D getBounds(String text, Font font) {
             return forMeasuring.getFontMetrics(font).getStringBounds(text, forMeasuring);
         }
