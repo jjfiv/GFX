@@ -16,11 +16,11 @@ public class IntPoint extends Point2D {
 	/**
 	 * The x coordinate of the point.
 	 */
-	public int x;
+	public final int x;
 	/**
 	 * The y coordinate of the point.
 	 */
-	public int y;
+	public final int y;
 
 	/**
 	 * A default point is at the origin.
@@ -53,6 +53,14 @@ public class IntPoint extends Point2D {
 	public IntPoint(int x, int y) {
 		this.x = x;
 		this.y = y;
+	}
+	
+	/**
+	 * Print the x,y from inside this IntPoint.
+	 */
+	@Override
+	public String toString() {
+		return "("+x+","+y+")";
 	}
 
 	/**
@@ -98,7 +106,16 @@ public class IntPoint extends Point2D {
 	 */
 	@Override
 	public void setLocation(double x, double y) {
-		this.x = (int) x;
-		this.y = (int) y;
+		throw new UnsupportedOperationException();
+	}
+	
+	/**
+	 * Create a new IntPoint in direction (dx,dy).
+	 * @param dx - number of x steps.
+	 * @param dy - number of y steps.
+	 * @return the new point.
+	 */
+	public IntPoint translate(int dx, int dy) {
+		return new IntPoint(x+dx, y+dy);
 	}
 }
