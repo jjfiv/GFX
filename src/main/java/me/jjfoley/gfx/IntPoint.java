@@ -70,6 +70,7 @@ public class IntPoint extends Point2D {
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
+		
 		if (o instanceof IntPoint) {
 			IntPoint point = (IntPoint) o;
 			return x == point.x && y == point.y;

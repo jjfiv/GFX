@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.imageio.ImageIO;
 import javax.imageio.stream.ImageOutputStream;
@@ -69,6 +70,11 @@ public abstract class GFX {
 	 * set to false, we will eventually close the window.
 	 */
 	private AtomicBoolean running = new AtomicBoolean(false);
+	
+	/**
+	 * Update thread, if any, or null.
+	 */
+	private AtomicReference<Thread> updater = new AtomicReference<>(null);
 
 	/**
 	 * The default constructor opens a window that is 500 pixels by 500 pixels.
@@ -234,6 +240,27 @@ public abstract class GFX {
 
 		frame.setVisible(false);
 	}
+	
+	/**
+	 * Start the window in the background.
+	 */
+	public final void startViewer() {
+		Thread already = null;
+		synchronized(this) {
+			already = this.updater.get();
+		}
+		if (already == null) {
+			GFX app = this;
+			Thread updater = new Thread() {
+				@Override
+				public void run() {
+					app.start();
+				}
+			};
+			this.updater.set(updater);
+			updater.start();
+		}
+	}
 
 	/**
 	 * Change the title of your window.
@@ -250,6 +277,14 @@ public abstract class GFX {
 	 */
 	public final void stop() {
 		running.set(false);
+		Thread maybeUpdater = updater.getAndSet(null);
+		if (maybeUpdater != null) {
+			try {
+				maybeUpdater.join();
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+		}
 	}
 
 	/**
