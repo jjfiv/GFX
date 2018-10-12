@@ -4,7 +4,7 @@
 
   <groupId>me.jjfoley</groupId>
   <artifactId>gfx</artifactId>
-  <version>1.5-SNAPSHOT</version>
+  <version>1.5</version>
   <packaging>jar</packaging>
 
   <name>gfx</name>
