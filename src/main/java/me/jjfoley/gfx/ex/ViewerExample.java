@@ -37,13 +37,8 @@ public class ViewerExample extends GFX {
 	}
 
 	public static void main(String[] args) throws IOException {
-		GFX app = new ViewerExample();
-		Thread background = new Thread() {
-			public void run() {
-				app.start();
-			}
-		};
-		background.start();
-		app.run();
+		ViewerExample ex = new ViewerExample();
+		ex.startViewer();
+		ex.run();
 	}
 }
