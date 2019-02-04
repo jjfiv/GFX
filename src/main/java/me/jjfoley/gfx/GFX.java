@@ -17,6 +17,7 @@ import javax.imageio.ImageIO;
 import javax.imageio.stream.ImageOutputStream;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 /**
@@ -93,22 +94,25 @@ public abstract class GFX {
 		this.view = new GFXView(width, height, this);
 		this.events = new EventManager(this);
 
-		synchronized (this) {
-			// Build the window which has one thing in it, our 'view' object.
-			frame = new JFrame(this.getClass().getSimpleName());
-			JPanel panel = new JPanel(new BorderLayout());
-			panel.add(view, BorderLayout.CENTER);
-			frame.setContentPane(panel);
-			frame.pack();
-			frame.setResizable(false);
-			frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-			// Connect event manager to Java's systems:
-			frame.addWindowListener(events);
-			frame.addKeyListener(events);
-			view.addMouseListener(events);
-			view.addMouseMotionListener(events);
-		}
+		GFX app = this;
+		SwingUtilities.invokeLater(() -> {
+			synchronized(app) {
+				// Build the window which has one thing in it, our 'view' object.
+				frame = new JFrame(app.getClass().getSimpleName());
+				JPanel panel = new JPanel(new BorderLayout());
+				panel.add(view, BorderLayout.CENTER);
+				frame.setContentPane(panel);
+				frame.pack();
+				frame.setResizable(false);
+				frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		
+				// Connect event manager to Java's systems:
+				frame.addWindowListener(events);
+				frame.addKeyListener(events);
+				view.addMouseListener(events);
+				view.addMouseMotionListener(events);
+			}
+		});
 	}
 
 	/**
