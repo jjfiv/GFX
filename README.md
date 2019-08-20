@@ -1,7 +1,7 @@
-# GFX [![Build Status](https://travis-ci.org/jjfiv/GFX.svg?branch=master)](https://travis-ci.org/jjfiv/GFX)
+# GFX [![Build Status](https://travis-ci.org/jjfiv/GFX.svg?branch=master)](https://travis-ci.org/jjfiv/GFX) [![Jitpack.io Badge](https://jitpack.io/v/jjfiv/gfx.svg)](https://jitpack.io/#jjfiv/gfx)
 Smith College / CSC212 / GFX library to simplify Graphics2D access.
 
-[JavaDoc](https://jitpack.io/com/github/jjfiv/GFX/1.2/javadoc/)
+[JavaDoc](https://jitpack.io/com/github/jjfiv/GFX/1.5.3/javadoc/)
 
 
 ## Motivation
@@ -14,13 +14,15 @@ import java.awt.Graphics2D;
 
 import me.jjfoley.gfx.GFX;
 
-public class MyDrawing extends GFX{
+public class MyDrawing extends GFX {
+	// Draw is called 60 times per second.
 	@Override
 	public void draw(Graphics2D g) {
 		g.setColor(Color.red);
 		g.fillRect(0, 0, 200, 200);
 	}
 
+	// Running with graphics is as simple as calling ``start`` on your class.
 	public static void main(String[] args) {
 		MyDrawing app = new MyDrawing();
 		app.start();
@@ -45,6 +47,6 @@ This repository can be used via [jitpack.io](https://jitpack.io). First, add the
      <dependency>
       <groupId>com.github.jjfiv</groupId>
       <artifactId>GFX</artifactId>
-      <version>1.2</version>
+      <version>1.5.3</version>
     </dependency>
  ```
