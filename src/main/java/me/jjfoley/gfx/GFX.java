@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -93,26 +94,6 @@ public abstract class GFX {
 	public GFX(int width, int height) {
 		this.view = new GFXView(width, height, this);
 		this.events = new EventManager(this);
-
-		GFX app = this;
-		SwingUtilities.invokeLater(() -> {
-			synchronized(app) {
-				// Build the window which has one thing in it, our 'view' object.
-				frame = new JFrame(app.getClass().getSimpleName());
-				JPanel panel = new JPanel(new BorderLayout());
-				panel.add(view, BorderLayout.CENTER);
-				frame.setContentPane(panel);
-				frame.pack();
-				frame.setResizable(false);
-				frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		
-				// Connect event manager to Java's systems:
-				frame.addWindowListener(events);
-				frame.addKeyListener(events);
-				view.addMouseListener(events);
-				view.addMouseMotionListener(events);
-			}
-		});
 	}
 
 	/**
@@ -219,30 +200,59 @@ public abstract class GFX {
 		System.out.println("Saved " + numSteps + " to " + destination + " successfully!");
 	}
 
+	private void setupSwing() {
+		synchronized(this) {
+			try {
+				SwingUtilities.invokeAndWait(() -> {
+					// Build the window which has one thing in it, our 'view' object.
+					frame = new JFrame(this.getClass().getSimpleName());
+					JPanel panel = new JPanel(new BorderLayout());
+					panel.add(view, BorderLayout.CENTER);
+					frame.setContentPane(panel);
+					frame.pack();
+					frame.setResizable(false);
+					frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+					// Connect event manager to Java's systems:
+					frame.addWindowListener(events);
+					frame.addKeyListener(events);
+					view.addMouseListener(events);
+					view.addMouseMotionListener(events);
+
+					frame.setVisible(true);
+					running.set(true);
+				});
+			} catch (InterruptedException | InvocationTargetException e) {
+				throw new RuntimeException("Couldn't start up GUI due to threading bug", e);
+			}
+
+		}
+	}
+
 	/**
 	 * Open the window and run your {@link #draw} method over and over!
 	 */
 	public final void start() {
-		synchronized (this) {
-			frame.setVisible(true);
-			running.set(true);
-		}
+		this.setupSwing();
 
 		long lastTime = System.nanoTime();
-		while (running.get()) {
-			frame.requestFocusInWindow();
-			long now = System.nanoTime();
-			update((now - lastTime) / 1e9);
-			lastTime = now;
-			view.render();
-			try {
-				Thread.sleep(delay_ms);
-			} catch (InterruptedException e) {
-				e.printStackTrace(System.err);
+		try {
+			while (running.get()) {
+				frame.requestFocusInWindow();
+				long now = System.nanoTime();
+				update((now - lastTime) / 1e9);
+				lastTime = now;
+				view.render();
+				try {
+					Thread.sleep(delay_ms);
+				} catch (InterruptedException e) {
+					e.printStackTrace(System.err);
+				}
 			}
+		} finally {
+			this.stop();
+			frame.setVisible(false);
 		}
-
-		frame.setVisible(false);
 	}
 	
 	/**
@@ -255,12 +265,8 @@ public abstract class GFX {
 		}
 		if (already == null) {
 			GFX app = this;
-			Thread updater = new Thread() {
-				@Override
-				public void run() {
-					app.start();
-				}
-			};
+			this.setupSwing();
+			Thread updater = new Thread(app::start);
 			this.updater.set(updater);
 			updater.start();
 		}
