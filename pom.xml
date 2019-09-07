@@ -8,6 +8,11 @@
   <packaging>jar</packaging>
 
   <name>gfx</name>
+  
+  <scm>
+    <connection>scm:git:git@github.com:jjfiv/GFX.git</connection>
+    <url>https://github.com/jjfiv/gfx</url>
+  </scm>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
