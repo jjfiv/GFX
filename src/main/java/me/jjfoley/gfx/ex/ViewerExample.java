@@ -9,6 +9,10 @@ import java.io.InputStreamReader;
 import me.jjfoley.gfx.GFX;
 import me.jjfoley.gfx.TextBox;
 
+/**
+ * This shows an example of running in the background so you can take text-input from the console and display graphics.
+ * Every time you hit enter, it updates the text in a TextBox.
+ */
 public class ViewerExample extends GFX {
 	TextBox guess;
 	

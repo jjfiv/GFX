@@ -32,6 +32,14 @@ public class TextBox {
     private double y = 0;
 
     /**
+     * Go ahead and create a TextBox with the text "TextBox::TBD".
+     * I'm expecting you'll be updating it later.
+     */
+    public TextBox() {
+        this(0,0,"TextBox::TBD", PLAIN_FONT, Color.red);
+    }
+
+    /**
      * Create a new TextBox with the given text in "plain" RED at (0,0).
      * 
      * @param text The message to display.

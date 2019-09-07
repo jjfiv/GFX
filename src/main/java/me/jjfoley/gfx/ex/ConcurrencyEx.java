@@ -6,6 +6,11 @@ import java.awt.Graphics2D;
 import me.jjfoley.gfx.GFX;
 import me.jjfoley.gfx.TextBox;
 
+/**
+ * This is a classical concurrrency example with graphics for an Operating Systems class demonstration of threads.
+ * Every time you click, it starts two threads that fight over the shared "count" variable.
+ * With perfect synchronization, you'd expect it to print zero every time, but it almost never does.
+ */
 public class ConcurrencyEx extends GFX {
 	int count = 0;
 	TextBox box;

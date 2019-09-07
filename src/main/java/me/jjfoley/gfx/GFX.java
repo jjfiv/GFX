@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -65,7 +67,7 @@ public abstract class GFX {
 	/**
 	 * This variable controls how fast we draw the screen.
 	 */
-	public static final int delay_ms = 1000 / 50;
+	public static int FPS = 50;
 
 	/**
 	 * This variable tells us whether we are running our application or not. When
@@ -172,8 +174,10 @@ public abstract class GFX {
 		try (ImageOutputStream out = ImageIO.createImageOutputStream(destination)) {
 			final BufferedImage frame = new BufferedImage(this.getWidth(), this.getHeight(),
 					BufferedImage.TYPE_INT_RGB);
+			int delay_ms = 1000 / FPS;
 			GifSequenceWriter writer = new GifSequenceWriter(out, frame.getType(), delay_ms, false);
 
+			List<Integer> frames = new ArrayList<>();
 			for (int i = 0; i < numSteps; i++) {
 				if (i % 20 == 0) {
 					System.out.printf("Writing gif: %d/%d\n", i, numSteps);
@@ -200,6 +204,9 @@ public abstract class GFX {
 		System.out.println("Saved " + numSteps + " to " + destination + " successfully!");
 	}
 
+	/**
+	 * Actually open the window (private method!)
+	 */
 	private void setupSwing() {
 		synchronized(this) {
 			try {
@@ -238,8 +245,9 @@ public abstract class GFX {
 		long lastTime = System.nanoTime();
 		try {
 			while (running.get()) {
+			    final int delay_ms = 1000 / FPS;
 				frame.requestFocusInWindow();
-				long now = System.nanoTime();
+				final long now = System.nanoTime();
 				update((now - lastTime) / 1e9);
 				lastTime = now;
 				view.render();

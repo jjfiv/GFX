@@ -1,18 +1,5 @@
 package me.jjfoley.gfx;
-/**  
- *  GifSequenceWriter.java
- *  
- *  Packaged for Smith CS212 on 2018-09-11 by John Foley (jjfoley@smith.edu).
- *  Updated JavaDocs.
- *  Found on StackOverflow here: https://stackoverflow.com/questions/777947/creating-animated-gif-with-imageio
- *  
- *  Created by Elliot Kroo on 2009-04-25.
- *
- * This work is licensed under the Creative Commons Attribution 3.0 Unported
- * License. To view a copy of this license, visit
- * http://creativecommons.org/licenses/by/3.0/ or send a letter to Creative
- * Commons, 171 Second Street, Suite 300, San Francisco, California, 94105, USA.
- */
+
 
 import javax.imageio.*;
 import javax.imageio.metadata.*;
@@ -21,10 +8,24 @@ import java.awt.image.*;
 import java.io.*;
 import java.util.Iterator;
 
-public class GifSequenceWriter {
-  protected ImageWriter gifWriter;
-  protected ImageWriteParam imageWriteParam;
-  protected IIOMetadata imageMetaData;
+/**
+ *  GifSequenceWriter.java
+ *
+ *  Packaged for Smith CS212 on 2018-09-11 by John Foley (jjfoley@smith.edu).
+ *  Updated JavaDocs.
+ *  Found on StackOverflow here: https://stackoverflow.com/questions/777947/creating-animated-gif-with-imageio
+ *
+ *  Created by Elliot Kroo on 2009-04-25.
+ *
+ * This work is licensed under the Creative Commons Attribution 3.0 Unported
+ * License. To view a copy of this license, visit
+ * http://creativecommons.org/licenses/by/3.0/ or send a letter to Creative
+ * Commons, 171 Second Street, Suite 300, San Francisco, California, 94105, USA.
+ */
+public class GifSequenceWriter implements Closeable {
+  private ImageWriter gifWriter;
+  private ImageWriteParam imageWriteParam;
+  private IIOMetadata imageMetaData;
   
   /**
    * Creates a new GifSequenceWriter
@@ -33,7 +34,7 @@ public class GifSequenceWriter {
    * @param imageType one of the imageTypes specified in BufferedImage
    * @param timeBetweenFramesMS the time between frames in miliseconds
    * @param loopContinuously wether the gif should loop repeatedly
-   * @throws IIOException if no gif ImageWriters are found
+   * @throws IOException if no gif ImageWriters are found
    *
    * @author Elliot Kroo (elliot[at]kroo[dot]net)
    */
@@ -41,7 +42,7 @@ public class GifSequenceWriter {
       ImageOutputStream outputStream,
       int imageType,
       int timeBetweenFramesMS,
-      boolean loopContinuously) throws IIOException, IOException {
+      boolean loopContinuously) throws IOException {
     // my method to create a writer
     gifWriter = getWriter(); 
     imageWriteParam = gifWriter.getDefaultWriteParam();
@@ -110,6 +111,8 @@ public class GifSequenceWriter {
   /**
    * Close this GifSequenceWriter object. This does not close the underlying
    * stream, just finishes off the GIF.
+   *
+   * @throws IOException if something goes wrong while saving the file.
    */
   public void close() throws IOException {
     gifWriter.endWriteSequence();    
