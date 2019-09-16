@@ -11,8 +11,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -175,27 +173,25 @@ public abstract class GFX {
 			final BufferedImage frame = new BufferedImage(this.getWidth(), this.getHeight(),
 					BufferedImage.TYPE_INT_RGB);
 			int delay_ms = 1000 / FPS;
-			GifSequenceWriter writer = new GifSequenceWriter(out, frame.getType(), delay_ms, false);
+			try (GifSequenceWriter writer = new GifSequenceWriter(out, frame.getType(), delay_ms, false)) {
+				for (int i = 0; i < numSteps; i++) {
+					if (i % 20 == 0) {
+						System.out.printf("Writing gif: %d/%d\n", i, numSteps);
+					}
+					Graphics2D g = frame.createGraphics();
+					g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+					g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-			List<Integer> frames = new ArrayList<>();
-			for (int i = 0; i < numSteps; i++) {
-				if (i % 20 == 0) {
-					System.out.printf("Writing gif: %d/%d\n", i, numSteps);
+					this.update((delay_ms) / 1e3);
+					g.setColor(Color.black);
+					g.fillRect(0, 0, this.getWidth(), this.getHeight());
+					this.draw(g);
+					g.dispose();
+
+					writer.writeToSequence(frame);
 				}
-				Graphics2D g = frame.createGraphics();
-				g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-				this.update((delay_ms) / 1e3);
-				g.setColor(Color.black);
-				g.fillRect(0, 0, this.getWidth(), this.getHeight());
-				this.draw(g);
-				g.dispose();
-
-				writer.writeToSequence(frame);
 			}
 
-			System.out.printf("Writing gif: %d/%d\n", numSteps, numSteps);
 		} catch (FileNotFoundException e) {
 			throw new AssertionError("Couldn't save the file you asked for: " + destination, e);
 		} catch (IOException e) {
