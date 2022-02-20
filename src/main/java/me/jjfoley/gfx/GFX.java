@@ -72,7 +72,7 @@ public abstract class GFX {
 	 * set to false, we will eventually close the window.
 	 */
 	private AtomicBoolean running = new AtomicBoolean(false);
-	
+
 	/**
 	 * Update thread, if any, or null.
 	 */
@@ -164,47 +164,10 @@ public abstract class GFX {
 	}
 
 	/**
-	 * Save your graphics app to a GIF file (make a new one for this so it plays to a file from the start!).
-	 * @param destination Try {@code new File("animation.gif")}.
-	 * @param numSteps How many steps do you want to save? A very large number here will make a big file and take a long time to write.
-	 */
-	public final void playToGIF(File destination, int numSteps) {
-		try (ImageOutputStream out = ImageIO.createImageOutputStream(destination)) {
-			final BufferedImage frame = new BufferedImage(this.getWidth(), this.getHeight(),
-					BufferedImage.TYPE_INT_RGB);
-			int delay_ms = 1000 / FPS;
-			try (GifSequenceWriter writer = new GifSequenceWriter(out, frame.getType(), delay_ms, false)) {
-				for (int i = 0; i < numSteps; i++) {
-					if (i % 20 == 0) {
-						System.out.printf("Writing gif: %d/%d\n", i, numSteps);
-					}
-					Graphics2D g = frame.createGraphics();
-					g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-					g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-					this.update((delay_ms) / 1e3);
-					g.setColor(Color.black);
-					g.fillRect(0, 0, this.getWidth(), this.getHeight());
-					this.draw(g);
-					g.dispose();
-
-					writer.writeToSequence(frame);
-				}
-			}
-
-		} catch (FileNotFoundException e) {
-			throw new AssertionError("Couldn't save the file you asked for: " + destination, e);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		System.out.println("Saved " + numSteps + " to " + destination + " successfully!");
-	}
-
-	/**
 	 * Actually open the window (private method!)
 	 */
 	private void setupSwing() {
-		synchronized(this) {
+		synchronized (this) {
 			try {
 				SwingUtilities.invokeAndWait(() -> {
 					// Build the window which has one thing in it, our 'view' object.
@@ -241,7 +204,7 @@ public abstract class GFX {
 		long lastTime = System.nanoTime();
 		try {
 			while (running.get()) {
-			    final int delay_ms = 1000 / FPS;
+				final int delay_ms = 1000 / FPS;
 				frame.requestFocusInWindow();
 				final long now = System.nanoTime();
 				update((now - lastTime) / 1e9);
@@ -258,13 +221,13 @@ public abstract class GFX {
 			frame.setVisible(false);
 		}
 	}
-	
+
 	/**
 	 * Start the window in the background.
 	 */
 	public final void startViewer() {
 		Thread already = null;
-		synchronized(this) {
+		synchronized (this) {
 			already = this.updater.get();
 		}
 		if (already == null) {
