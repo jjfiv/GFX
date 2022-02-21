@@ -3,11 +3,11 @@
 
   <groupId>me.jjfoley</groupId>
   <artifactId>gfx</artifactId>
-  <version>1.7-SNAPSHOT</version>
+  <version>1.7.0</version>
   <packaging>jar</packaging>
 
   <name>gfx</name>
-  
+
   <scm>
     <connection>scm:git:git@github.com:jjfiv/GFX.git</connection>
     <url>https://github.com/jjfiv/gfx</url>
@@ -56,7 +56,8 @@
         </executions>
       </plugin>
 
-      <plugin>  <!-- Create sources jar -->
+      <plugin>
+        <!-- Create sources jar -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
         <version>3.2.1</version>
