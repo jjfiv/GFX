@@ -1,7 +1,7 @@
 # GFX [![Build Status](https://travis-ci.org/jjfiv/GFX.svg?branch=master)](https://travis-ci.org/jjfiv/GFX) [![Jitpack.io Badge](https://jitpack.io/v/jjfiv/gfx.svg)](https://jitpack.io/#jjfiv/gfx)
-Smith College / CSC212 / GFX library to simplify Graphics2D access.
+GFX library to simplify Graphics2D access to just using inheritance. If you just want to put some graphics on screen and don't want to learn about the Swing threading model, this is your friend.
 
-[JavaDoc](https://jitpack.io/com/github/jjfiv/GFX/1.6.0/javadoc/)
+[JavaDoc](https://jitpack.io/com/github/jjfiv/GFX/1.7.0/javadoc/)
 
 
 ## Motivation
@@ -47,6 +47,6 @@ This repository can be used via [jitpack.io](https://jitpack.io). First, add the
      <dependency>
       <groupId>com.github.jjfiv</groupId>
       <artifactId>GFX</artifactId>
-      <version>1.6.0</version>
+      <version>1.7.0</version>
     </dependency>
  ```
