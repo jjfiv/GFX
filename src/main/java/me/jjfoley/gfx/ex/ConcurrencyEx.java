@@ -7,53 +7,55 @@ import me.jjfoley.gfx.GFX;
 import me.jjfoley.gfx.TextBox;
 
 /**
- * This is a classical concurrrency example with graphics for an Operating Systems class demonstration of threads.
- * Every time you click, it starts two threads that fight over the shared "count" variable.
- * With perfect synchronization, you'd expect it to print zero every time, but it almost never does.
+ * This is a classical concurrrency example with graphics for an Operating
+ * Systems class demonstration of threads.
+ * Every time you click, it starts two threads that fight over the shared
+ * "count" variable.
+ * With perfect synchronization, you'd expect it to print zero every time, but
+ * it almost never does.
  */
 public class ConcurrencyEx extends GFX {
 	int count = 0;
 	TextBox box;
-	
+
 	Thread t1;
 	Thread t2;
-	
+
 	public ConcurrencyEx() {
 		this.count = 0;
-		
+
 		box = new TextBox("Hello World");
 		box.setFontSize(72.0);
 		box.setColor(Color.black);
-		
+
 		startThreads();
 	}
-	
+
 	public void startThreads() {
 		final int N = 1_000;
-		GFX app = this;
 		Runnable upTask = () -> {
-			for(int i=0; i<N; i++) {
-//				synchronized(app) {
-					count += 1;
-//				}
+			for (int i = 0; i < N; i++) {
+				// synchronized(app) {
+				count += 1;
+				// }
 				sleep(0);
 			}
 		};
 		Runnable downTask = () -> {
-			for (int i=0; i<N; i++) {
-				//synchronized(app) {
-					count -= 1;
-				//}
+			for (int i = 0; i < N; i++) {
+				// synchronized(app) {
+				count -= 1;
+				// }
 				sleep(0);
 			}
 		};
-		
+
 		t1 = new Thread(upTask);
 		t2 = new Thread(downTask);
 		t1.start();
 		t2.start();
 	}
-	
+
 	@Override
 	public void draw(Graphics2D g) {
 		// white background
@@ -62,16 +64,16 @@ public class ConcurrencyEx extends GFX {
 
 		// centered black text
 		box.centerInside(this.windowAsRectangle());
-		box.setString(""+count);
+		box.setString("" + count);
 		box.draw(g);
-		
+
 		// reset on click
 		if (this.processClick() != null) {
 			this.count = 0;
 			startThreads();
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		GFX app = new ConcurrencyEx();
 		app.start();

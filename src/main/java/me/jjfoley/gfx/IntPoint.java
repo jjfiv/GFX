@@ -31,6 +31,7 @@ public class IntPoint extends Point2D {
 
 	/**
 	 * This constructor lets us copy a point.
+	 * 
 	 * @param p The point to copy.
 	 */
 	public IntPoint(IntPoint p) {
@@ -39,6 +40,7 @@ public class IntPoint extends Point2D {
 
 	/**
 	 * This constructor is used to get the coordinates from a {@link MouseEvent}.
+	 * 
 	 * @param e The MouseEvent (either movement, or click).
 	 */
 	IntPoint(MouseEvent e) {
@@ -47,6 +49,7 @@ public class IntPoint extends Point2D {
 
 	/**
 	 * This creates a point from a specific (x,y) pair.
+	 * 
 	 * @param x The x coordinate.
 	 * @param y The y coordinate.
 	 */
@@ -54,13 +57,13 @@ public class IntPoint extends Point2D {
 		this.x = x;
 		this.y = y;
 	}
-	
+
 	/**
 	 * Print the x,y from inside this IntPoint.
 	 */
 	@Override
 	public String toString() {
-		return "("+x+","+y+")";
+		return "(" + x + "," + y + ")";
 	}
 
 	/**
@@ -70,7 +73,7 @@ public class IntPoint extends Point2D {
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		
+
 		if (o instanceof IntPoint) {
 			IntPoint point = (IntPoint) o;
 			return x == point.x && y == point.y;
@@ -79,7 +82,8 @@ public class IntPoint extends Point2D {
 	}
 
 	/**
-	 * This method allows us to put an IntPoint into a {@link java.util.HashMap} or {@link java.util.HashSet}.
+	 * This method allows us to put an IntPoint into a {@link java.util.HashMap} or
+	 * {@link java.util.HashSet}.
 	 */
 	@Override
 	public int hashCode() {
@@ -93,7 +97,7 @@ public class IntPoint extends Point2D {
 	public double getX() {
 		return x;
 	}
-	
+
 	/**
 	 * This is part of the {@link Point2D} interface.
 	 */
@@ -109,14 +113,15 @@ public class IntPoint extends Point2D {
 	public void setLocation(double x, double y) {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	/**
 	 * Create a new IntPoint in direction (dx,dy).
+	 * 
 	 * @param dx - number of x steps.
 	 * @param dy - number of y steps.
 	 * @return the new point.
 	 */
 	public IntPoint translate(int dx, int dy) {
-		return new IntPoint(x+dx, y+dy);
+		return new IntPoint(x + dx, y + dy);
 	}
 }

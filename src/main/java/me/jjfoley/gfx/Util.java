@@ -15,19 +15,24 @@ import java.util.Random;
  * This class contains methods that are annoying to write but are very useful!
  */
 public class Util {
-    private Util() {}
+    private Util() {
+        throw new UnsupportedOperationException();
+    }
 
     public static Color getRandomColor(double brightness, Random rand) {
         float brightf = (float) brightness;
         return Color.getHSBColor(rand.nextFloat(), brightf, brightf);
     }
+
     public static <T> List<T> makeList() {
         return new ArrayList<T>();
     }
+
     public static <T> Set<T> makeSet() {
         return new HashSet<T>();
     }
-    public static <K,V> Map<K,V> makeMap() {
-        return new HashMap<K,V>();
+
+    public static <K, V> Map<K, V> makeMap() {
+        return new HashMap<K, V>();
     }
 }

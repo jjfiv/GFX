@@ -1,21 +1,13 @@
 package me.jjfoley.gfx;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageOutputStream;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -224,6 +216,7 @@ public abstract class GFX {
 
 	/**
 	 * Start the window in the background.
+	 * You probably want {@link #start} instead.
 	 */
 	public final void startViewer() {
 		Thread already = null;

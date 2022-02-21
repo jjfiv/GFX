@@ -26,9 +26,10 @@ class GFXView extends Canvas {
 
 	/**
 	 * Construct a new view of a particular size for an app.
-	 * @param width - width of the window in pixels.
+	 * 
+	 * @param width  - width of the window in pixels.
 	 * @param height - height of the window in pixels.
-	 * @param app - the app object itself.
+	 * @param app    - the app object itself.
 	 */
 	public GFXView(int width, int height, GFX app) {
 		this.defineSize(width, height);
@@ -37,22 +38,25 @@ class GFXView extends Canvas {
 
 	/**
 	 * Java has four set size methods! This calls {@linkplain #setSize(Dimension)},
-	 * {@linkplain #setPreferredSize(Dimension)}, {@linkplain #setMinimumSize(Dimension)}, and
-	 * {@linkplain #setMaximumSize(Dimension)}. This prevents resizing and getting a window that's too big or small.
+	 * {@linkplain #setPreferredSize(Dimension)},
+	 * {@linkplain #setMinimumSize(Dimension)}, and
+	 * {@linkplain #setMaximumSize(Dimension)}. This prevents resizing and getting a
+	 * window that's too big or small.
 	 *
-	 * @param width - the pixel width of the window.
+	 * @param width  - the pixel width of the window.
 	 * @param height - the pixel height of the window.
 	 */
 	protected final void defineSize(int width, int height) {
 		this.size = new Dimension(width, height);
-		setSize(size);
-		setPreferredSize(size);
-		setMinimumSize(size);
-		setMaximumSize(size);
+		this.setSize(size);
+		this.setPreferredSize(size);
+		this.setMinimumSize(size);
+		this.setMaximumSize(size);
 	}
 
 	/**
-	 * This method actually updates the graphics on this canvas, using a {@linkplain BufferStrategy} and provides a
+	 * This method actually updates the graphics on this canvas, using a
+	 * {@linkplain BufferStrategy} and provides a
 	 * {@linkplain java.awt.Graphics2D} object to {@linkplain GFX#draw}.
 	 */
 	public void render() {
@@ -72,7 +76,7 @@ class GFXView extends Canvas {
 		app.draw(g);
 
 		g.dispose();
-		bs.show();		
+		bs.show();
 	}
 
 }

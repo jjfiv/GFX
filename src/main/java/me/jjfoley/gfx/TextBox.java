@@ -36,7 +36,7 @@ public class TextBox {
      * I'm expecting you'll be updating it later.
      */
     public TextBox() {
-        this(0,0,"TextBox::TBD", PLAIN_FONT, Color.red);
+        this(0, 0, "TextBox::TBD", PLAIN_FONT, Color.red);
     }
 
     /**
@@ -79,7 +79,7 @@ public class TextBox {
      */
     public void setFont(Font font) {
         this.font = font;
-        measure();
+        this.measure();
     }
 
     /**
@@ -89,7 +89,7 @@ public class TextBox {
      */
     public void setFontSize(double size) {
         this.font = font.deriveFont((float) size);
-        measure();
+        this.measure();
     }
 
     /**
@@ -103,7 +103,7 @@ public class TextBox {
         this.text = text;
         // Only measure text if it's any different!
         if (!Objects.equals(oldText, text)) {
-            measure();
+            this.measure();
         }
     }
 
@@ -111,7 +111,7 @@ public class TextBox {
      * If text or font ever changes, we re-measure our object here.
      */
     private void measure() {
-        measured = FontMeasuring.getBounds(text, font);
+        this.measured = FontMeasuring.getBounds(text, font);
     }
 
     /**
@@ -164,7 +164,7 @@ public class TextBox {
         private static BufferedImage forGraphics = new BufferedImage(1, 1, BufferedImage.TYPE_4BYTE_ABGR);
         private static Graphics2D forMeasuring = forGraphics.createGraphics();
 
-        private static Rectangle2D getBounds(String text, Font font) {
+        private static synchronized Rectangle2D getBounds(String text, Font font) {
             return forMeasuring.getFontMetrics(font).getStringBounds(text, forMeasuring);
         }
     }

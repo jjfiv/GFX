@@ -18,16 +18,20 @@ class EventManager implements WindowListener, KeyListener, MouseListener, MouseM
 
 	/**
 	 * The atomically referenced location of the most recent mouse click.
-	 * Can be cleared by the user or updated by a new event on different threads safely.
+	 * Can be cleared by the user or updated by a new event on different threads
+	 * safely.
 	 */
 	AtomicReference<IntPoint> lastClick = new AtomicReference<>();
 	/**
-	 * The atomically referenced location of the mouse when it was last over the window.
-	 * Can be cleared by the user or updated by a new event on different threads safely.
+	 * The atomically referenced location of the mouse when it was last over the
+	 * window.
+	 * Can be cleared by the user or updated by a new event on different threads
+	 * safely.
 	 */
 	AtomicReference<IntPoint> lastMousePosition = new AtomicReference<>();
 	/**
-	 * The atomically-updated mapping from each keycode to their current state up=true, down=false.
+	 * The atomically-updated mapping from each keycode to their current state
+	 * up=true, down=false.
 	 * Can be read/updated from different threads.
 	 */
 	ConcurrentHashMap<Integer, Boolean> keyState = new ConcurrentHashMap<>();
